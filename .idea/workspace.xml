@@ -4,13 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="952a4778-160a-4edf-8ece-a7fe609be689" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/DMD_variant_landscape.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/DMD_variant_landscape.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-    </list>
+    <list default="true" id="952a4778-160a-4edf-8ece-a7fe609be689" name="Changes" comment="Added initial requirements for the project (they might change, but probably will not)" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,11 +69,32 @@
       <updated>1763034613946</updated>
       <workItem from="1763034630293" duration="1379000" />
       <workItem from="1763126954828" duration="121000" />
-      <workItem from="1763377708954" duration="793000" />
+      <workItem from="1763377708954" duration="1117000" />
     </task>
+    <task id="LOCAL-00001" summary="Added initial requirements for the project (they might change, but probably will not)">
+      <option name="closed" value="true" />
+      <created>1763378634409</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1763378634409</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Added initial requirements for the project (they might change, but probably will not)">
+      <option name="closed" value="true" />
+      <created>1763378669310</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1763378669310</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Added initial requirements for the project (they might change, but probably will not)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added initial requirements for the project (they might change, but probably will not)" />
   </component>
 </project>
