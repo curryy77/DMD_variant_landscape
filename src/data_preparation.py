@@ -1,6 +1,10 @@
 import pandas as pd
 from pathlib import Path
 
+# Constant paths
+RAW_DATA = Path("../data/raw")
+PROCESSED_DATA = Path("../data/processed")
+
 # Working with ClinVar DMD Database
 def load_and_clean_clinvar(path: str | Path) -> pd.DataFrame:
     df = pd.read_csv(path, sep="\t")
@@ -142,3 +146,53 @@ def load_and_clean_ensembl(path: str | Path) -> pd.DataFrame:
 
     df = df[cols]
     return df
+
+# Preparing two CSV-tables from GSE38417 series matrix, one with metadata, another with the expression
+def prepare_gse38417():
+    series_path = RAW_DATA / "expression/GSE38417_series_matrix.txt"
+
+    # Names for the output csv-tables
+    metadata_out = PROCESSED_DATA / "GSE38417_samples.csv"
+    expression_out = PROCESSED_DATA / "GSE38417_expression.csv"
+
+    # Preparing the metadata (GSE38417_samples.csv)
+    meta_lines = {}
+    with series_path.open(encoding="utf-8", errors="ignore") as f:
+        for raw_line in f:
+            line = raw_line.rstrip("\n")
+
+            # We take the !Sample_ strings for metadata
+            if line.startswith("!Sample_"):
+                parts = line.split("\t")
+
+                key = parts[0].replace("!Sample_", "")
+                values = parts[1:]
+                meta_lines[key] = values
+
+            # Signal string
+            if line.startswith("!series_matrix_table_begin"):
+                break
+
+    # Transform the dictionary into the dataframe, transpose it to match the expression
+    meta_df = pd.DataFrame(meta_lines)
+    meta_df = meta_df.T
+
+    # Convert the metadata to csv
+    meta_df.to_csv(metadata_out, index=False)
+
+    # Preparing the expression (GSE38417_expression.csv), via pandas
+    expr_df = pd.read_csv(
+        series_path,
+        sep = "\t",
+        comment = "!",
+        index_col = 0
+    )
+
+    # Convert the expression to csv
+    expr_df.to_csv(expression_out, index=False)
+
+    return expr_df, meta_df
+
+# By launching main, we obtain all the csv-data in the ../data/processed
+if __name__ == "__main__":
+    prepare_gse38417()
