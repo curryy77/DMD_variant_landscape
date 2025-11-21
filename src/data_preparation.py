@@ -84,7 +84,7 @@ def load_and_clean_gnomad(path: str | Path) -> pd.DataFrame:
     # Turning the genomic position in the numeric type, same as in ClinVar
     df["pos38"] = pd.to_numeric(df["pos38"], errors="coerce")
 
-    # Returns true if the allele frequence is not NaN
+    # Returns true if the allele frequency is not NaN
     df["in_gnomad"] = ~df["allele_freq"].isna()
 
     # Checks if the allele frequency is high enough
@@ -100,6 +100,44 @@ def load_and_clean_gnomad(path: str | Path) -> pd.DataFrame:
         "af_high",
         "hemizygote_count",
         "homozygote_count",
+    ]
+
+    df = df[cols]
+    return df
+
+# Working with Ensembl DMD Database
+def load_and_clean_ensembl(path: str | Path) -> pd.DataFrame:
+    df = pd.read_csv(path)
+
+    df = df.rename(columns= {
+        "Variant ID": "rsid",
+        "Location": "location",
+        "Conseq. Type": "ensembl_consequence",
+        "AA": "aa_change",
+        "AA coord": "aa_pos",
+        "REVEL": "revel",
+        "MetaLR": "meta_lr",
+        "Mutation Assessor": "mutation_assessor",
+    })
+
+    # Split the location into two columns - chromosome and the position in it
+    chr_pos = df["location"].str.split(":",  expand=True)
+    df["chr38"] = chr_pos[0]
+    df["pos38"] = pd.to_numeric(chr_pos[1], errors="coerce")
+
+    # Deal with the duplicates on rsid
+    df = df.drop_duplicates(subset=["rsid", "pos38"])
+
+    cols = [
+        "rsid",
+        "chr38",
+        "pos38",
+        "ensembl_consequence",
+        "aa_change",
+        "aa_pos",
+        "revel",
+        "meta_lr",
+        "mutation_assessor",
     ]
 
     df = df[cols]
