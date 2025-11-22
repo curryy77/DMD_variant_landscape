@@ -206,8 +206,20 @@ def prepare_gse38417():
             if line.startswith("!series_matrix_table_begin"):
                 break
 
-    # Transform the dictionary into the dataframe, transpose it to match the expression
+    # Transform the dictionary into the dataframe
     meta_df = pd.DataFrame(meta_lines)
+
+    # Save the safe columns
+    cols = [
+        "geo_accession",
+        "title",
+        "source_name_ch1",
+        "characteristics_ch1"
+    ]
+
+    meta_df = meta_df[cols]
+
+    # Transpose the dataframe to match the expression
     meta_df = meta_df.T
 
     # Convert the metadata to csv
