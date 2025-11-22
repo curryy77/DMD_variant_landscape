@@ -5,7 +5,7 @@ from pathlib import Path
 RAW_DATA = Path("../data/raw")
 PROCESSED_DATA = Path("../data/processed")
 
-# Working with ClinVar DMD Database
+# Working with ClinVar DMD Dataset - the main dataset in the analysis
 def load_and_clean_clinvar(path: str | Path) -> pd.DataFrame:
     df = pd.read_csv(path, sep="\t")
 
@@ -14,18 +14,50 @@ def load_and_clean_clinvar(path: str | Path) -> pd.DataFrame:
 
     df = df.rename(columns= {
         "VariationID": "var_id",
-        "Protein change": "protein_change",
-        "Variant type": "var_type",
+        "dbSNP ID": "rsid",
+        "GRCh37Chromosome": "chr37",
+        "GRCh37Location": "pos37",
         "GRCh38Chromosome": "chr38",
         "GRCh38Location": "pos38",
-        "dbSNP ID": "rsid",
+        "Protein change": "protein_change",
+        "Variant type": "var_type",
         "Germline classification": "clinvar_class",
         "Molecular consequence": "clinvar_consequence",
         "Condition(s)": "condition_raw",
     })
 
-    # Turning the genomic position into the numeric type, else NaN
-    df["pos38"] = pd.to_numeric(df["pos38"], errors="coerce")
+    # Fill NaN in chromosomes column with blank values
+    chr38 = df["chr38"].fillna("")
+    chr37 = df["chr37"].fillna("")
+
+    # Unify chr38 and chr37 (chr38, else chr37), replace artifacts to X
+    chr_unified = chr38.where(chr38 != "", chr37)
+    chr_unified = chr_unified.replace({"X|X": "X", "X||X": "X"})
+
+    df["chr"] = chr_unified
+
+    # Fill NaN in positions with blank values
+    pos38 = df["pos38"].fillna("").astype(str)
+    pos37 = df["pos37"].fillna("").astype(str)
+
+    # Unify pos38 and pos37 (pos38, else pos37)
+    pos_unified = pos38.where(pos38 != "", pos37)
+
+    # Work with the intervals in pos_unified
+    parts = pos_unified.str.split("-", n = 1, expand=True)
+    start_str = parts[0]
+    # If it is not an interval, then the string is None
+    end_str = parts[1] if parts.shape[1] > 1 else None
+
+    start = pd.to_numeric(start_str, errors="coerce")
+    end = pd.to_numeric(end_str, errors="coerce")
+    mid = pd.to_numeric(((start + end) / 2).round(), errors="coerce")  # take the middle, with minimum bias
+    pos = mid.where(end.notna(), start)
+
+    df["pos"] = pos
+
+    # Drop the remaining NaN values
+    df = df.dropna(subset=["chr", "pos"])
 
     mapping = {
         "Pathogenic" : "pathogenic",
@@ -55,8 +87,8 @@ def load_and_clean_clinvar(path: str | Path) -> pd.DataFrame:
     cols = [
         "var_id",
         "rsid",
-        "chr38",
-        "pos38",
+        "chr",
+        "pos",
         "protein_change",
         "var_type",
         "clinvar_consequence",
@@ -75,8 +107,8 @@ def load_and_clean_gnomad(path: str | Path) -> pd.DataFrame:
     df = pd.read_csv(path)
 
     df = df.rename(columns= {
-        "Chromosome": "chr38",
-        "Position": "pos38",
+        "Chromosome": "chr",
+        "Position": "pos",
         "Reference": "ref",
         "Alternate": "alt",
         "Allele Frequency": "allele_freq",
@@ -86,7 +118,7 @@ def load_and_clean_gnomad(path: str | Path) -> pd.DataFrame:
     })
 
     # Turning the genomic position in the numeric type, same as in ClinVar
-    df["pos38"] = pd.to_numeric(df["pos38"], errors="coerce")
+    df["pos"] = pd.to_numeric(df["pos"], errors="coerce")
 
     # Returns true if the allele frequency is not NaN
     df["in_gnomad"] = ~df["allele_freq"].isna()
@@ -96,7 +128,8 @@ def load_and_clean_gnomad(path: str | Path) -> pd.DataFrame:
 
     cols = [
         "var_id",
-        "chr38",
+        "chr",
+        "pos",
         "ref",
         "alt",
         "allele_freq",
@@ -126,16 +159,16 @@ def load_and_clean_ensembl(path: str | Path) -> pd.DataFrame:
 
     # Split the location into two columns - chromosome and the position in it
     chr_pos = df["location"].str.split(":",  expand=True)
-    df["chr38"] = chr_pos[0]
-    df["pos38"] = pd.to_numeric(chr_pos[1], errors="coerce")
+    df["chr"] = chr_pos[0]
+    df["pos"] = pd.to_numeric(chr_pos[1], errors="coerce")
 
     # Deal with the duplicates on rsid
-    df = df.drop_duplicates(subset=["rsid", "pos38"])
+    df = df.drop_duplicates(subset=["rsid", "pos"])
 
     cols = [
         "rsid",
-        "chr38",
-        "pos38",
+        "chr",
+        "pos",
         "ensembl_consequence",
         "aa_change",
         "aa_pos",
@@ -193,6 +226,39 @@ def prepare_gse38417():
 
     return expr_df, meta_df
 
+# Merge the dataframes obtained
+def prepare_master():
+    clinvar_path = RAW_DATA / "ClinVar_DMD_raw.tsv"
+    gnomad_path = RAW_DATA / "gnomAD_DMD_raw.csv"
+    ensembl_path = RAW_DATA / "Ensembl_DMD_raw.csv"
+
+    # The output file name
+    master_out = PROCESSED_DATA / "DMD_variants_master.csv"
+
+    # Loading dataframes
+    cvar = load_and_clean_clinvar(clinvar_path)
+    gnom = load_and_clean_gnomad(gnomad_path)
+    ensm = load_and_clean_ensembl(ensembl_path)
+
+    # Firstly, we merge ClinVar <= gnomAD by var_id
+    merged = cvar.merge(
+        gnom,
+        on=["var_id", "chr", "pos"],
+        how="left",
+    )
+
+    # Secondly, we do ClinVar <= Ensembl by rsid
+    merged = merged.merge(
+        ensm,
+        on=["rsid", "chr", "pos"],
+        how="left",
+    )
+
+    merged.to_csv(master_out, index=False)
+
+    return merged
+
 # By launching main, we obtain all the csv-data in the ../data/processed
 if __name__ == "__main__":
+    prepare_master()
     prepare_gse38417()
