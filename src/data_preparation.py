@@ -49,14 +49,19 @@ def load_and_clean_clinvar(path: str | Path) -> pd.DataFrame:
     # If it is not an interval, then the string is None
     end_str = parts[1] if parts.shape[1] > 1 else None
 
+    # Save the interval length for intervals in the dataframe
     start = pd.to_numeric(start_str, errors="coerce")
-    end = pd.to_numeric(end_str, errors="coerce")
-    mid = pd.to_numeric(((start + end) / 2).round(), errors="coerce")  # take the middle, with minimum bias
-    pos = mid.where(end.notna(), start)
+    if end_str is not None:
+        end = pd.to_numeric(end_str, errors="coerce")
+        interval_length = end - start
+    else:
+        interval_length = pd.Series(index=df.index, dtype="float64") # for points, it will be NaN
 
-    df["pos"] = pos
+    # Save the columns
+    df["pos"] = start
+    df["interval_length"] = interval_length
 
-    # Drop the remaining NaN values
+    # Drop the remaining NaN values for chr and pos
     df = df.dropna(subset=["chr", "pos"])
 
     mapping = {
@@ -89,6 +94,7 @@ def load_and_clean_clinvar(path: str | Path) -> pd.DataFrame:
         "rsid",
         "chr",
         "pos",
+        "interval_length",
         "protein_change",
         "var_type",
         "clinvar_consequence",
