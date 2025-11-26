@@ -225,9 +225,6 @@ def prepare_gse38417():
 
     meta_df = meta_df[cols]
 
-    # Transpose the dataframe to match the expression
-    meta_df = meta_df.T
-
     # Convert the metadata to csv
     meta_df.to_csv(metadata_out, index=False)
 
