@@ -1,0 +1,36 @@
+type,domain_name,start_aa,end_aa
+region,Actin-binding,1,240
+domain,Calponin-homology (CH1) 1,15,119
+region,ANK-2 and ANK-3 binding,63,72
+domain,Calponin-homology (CH2) 2,134,240
+repeat,Spectrin 1,339,447
+repeat,Spectrin 2,448,556
+repeat,Spectrin 3,559,667
+repeat,Spectrin 4,719,828
+repeat,Spectrin 5,830,934
+repeat,Spectrin 6,943,1045
+repeat,Spectrin 7,1048,1154
+repeat,Spectrin 8,1157,1263
+repeat,Spectrin 9,1266,1367
+repeat,Spectrin 10,1368,1463
+region,Interaction with SYNM,1415,1913
+repeat,Spectrin 11,1468,1568
+repeat,Spectrin 12,1571,1676
+repeat,Spectrin 13,1679,1778
+repeat,Spectrin 14,1779,1874
+repeat,Spectrin 15,1877,1979
+repeat,Spectrin 16,1992,2101
+repeat,Spectrin 17,2104,2208
+repeat,Spectrin 18,2211,2318
+repeat,Spectrin 19,2319,2423
+repeat,Spectrin 20,2475,2577
+repeat,Spectrin 21,2580,2686
+repeat,Spectrin 22,2689,2802
+repeat,Spectrin 23,2808,2930
+repeat,Spectrin 24,2935,3040
+domain,WW,3055,3088
+region,Interaction with SYNM,3058,3408
+zinc_finger,ZZ-type;degenerate,3308,3364
+region,Binds to SNTB1,3466,3518
+region,Disordered,3528,3554
+region,Disordered,3603,3685

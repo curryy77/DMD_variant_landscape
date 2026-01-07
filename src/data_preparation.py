@@ -186,6 +186,78 @@ def load_and_clean_ensembl(path: str | Path) -> pd.DataFrame:
     df = df[cols]
     return df
 
+# Preparing exon (and domain) annotations' csv-table
+def prepare_annotations():
+    domains_data = None # the domains data about dystrophin was taken manually from UniProt (links WIP)
+    exons_data = RAW_DATA / "annotation/exons_DMD_raw.csv"
+
+    # Names for the output csv-tables
+    exons_out = PROCESSED_DATA / "annotation/DMD_exons.csv"
+
+    df = pd.read_csv(exons_data)
+
+    df = df.rename(columns= {
+        "No.": "no",
+        "Exon / Intron": "label",
+        "Start": "start",
+        "End": "end",
+        "Length": "length"
+    })
+
+    df = df[df["label"].notna()].copy()
+
+    # Drop upstream/downstream helper rows
+    drop_helper = df["label"].str.contains("upstream sequence|downstream sequence")
+    df = df[~drop_helper].copy()
+
+    # to_int parser, that handles commas
+    def to_int(s):
+        s = s.fillna("").astype(str).str.replace(",", "").str.strip()
+        return pd.to_numeric(s, errors="coerce")
+
+    start = to_int(df["start"])
+    end = to_int(df["end"])
+    length = to_int(df["length"])
+
+    # Normalize genomic coords (since it is a minus strand)
+    start_norm = pd.concat([start, end], axis=1).min(axis=1)
+    end_norm = pd.concat([start, end], axis=1).max(axis=1)
+
+    is_intron = df["label"].str.startswith("Intron")
+
+    # Exon uses 'no', while intron parses as Intron n-(n+1) -> n
+    number = pd.Series(pd.NA, index=df.index)
+    number.loc[~is_intron] = pd.to_numeric(df.loc[~is_intron, "no"], errors="coerce")
+
+    intron_num = df.loc[is_intron, "label"].str.extract(r"Intron\s+(\d+)\s*-\s*(\d+)")[0]
+    number.loc[is_intron] = pd.to_numeric(intron_num, errors="coerce")
+
+    feat_id = pd.Series(pd.NA, index=df.index)
+    feat_id.loc[~is_intron] = df.loc[~is_intron, "label"]
+    feat_id.loc[is_intron] = df.loc[is_intron, "label"]
+
+    # Feature label
+    feature = pd.Series("exon", index=df.index)
+    feature.loc[is_intron] = "intron"
+
+    # Defining length, prefer provided, otherwise compute
+    length = length.where(length.notna(), (end_norm - start_norm + 1))
+
+    exons_df = pd.DataFrame({
+        "feature": feature,
+        "number": number,
+        "id": feat_id,
+        "start": start_norm,
+        "end": end_norm,
+        "length": length,
+        "chr": "X",
+        "strand": "-",
+    })
+
+    exons_df.to_csv(exons_out, index=False)
+
+    return exons_df
+
 # Preparing two CSV-tables from GSE38417 series matrix, one with metadata, another with the expression
 def prepare_gse38417():
     series_path = RAW_DATA / "expression/GSE38417_series_matrix.txt"
@@ -277,3 +349,4 @@ def prepare_master():
 if __name__ == "__main__":
     prepare_master()
     prepare_gse38417()
+    prepare_annotations()
