@@ -40,7 +40,7 @@ def annotate_exon(variants: pd.DataFrame, exons: pd.DataFrame) -> pd.Series:
 def infer_mutation_type_group(row) -> str:
     cons = (str(row.get("clinvar_consequence", "")) + " " +
     str(row.get("ensembl_consequence", ""))).lower()
-    var_type = str(row.get("variant_type", "")).lower()
+    var_type = str(row.get("var_type", "")).lower()
     interval = row.get("interval_length", pd.NA)
 
     # Separate large deletions or duplications
@@ -49,7 +49,7 @@ def infer_mutation_type_group(row) -> str:
 
     if "frameshift" in cons or "frameshift" in var_type:
         return "frameshift"
-    if "stop_gained" in cons or "nonsense" in var_type:
+    if "stop gained" in cons or "nonsense" in var_type:
         return "nonsense"
     if "splice" in cons:
         return "splice"
