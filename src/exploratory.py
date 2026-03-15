@@ -166,39 +166,13 @@ def save_domain_distrib_plot(df: pd.DataFrame) -> pd.DataFrame:
         rows=1,
         cols=2,
         subplot_titles=[
-            "Variants by domain",
-            "Pathogenic fraction by domain"
+            "Pathogenic fraction by domain",
+            "Variants by domain"
         ],
         horizontal_spacing=0.12
     )
 
-    # Figure 1.1 - pathogenic variants
-    fig.add_trace(
-        go.Bar(
-            x=x_order,
-            y=top_domains["pathogenic"],
-            name="pathogenic",
-            marker_color="#d62728",
-            customdata=top_domains[["non_pathogenic", "total", "pathogenic_fraction"]],
-        ),
-        row=1,
-        col=1
-    )
-
-    # Figure 1.2 - non-pathogenic variants
-    fig.add_trace(
-        go.Bar(
-            x=x_order,
-            y=top_domains["non_pathogenic"],
-            name="non_pathogenic",
-            marker_color="#1f77b4",
-            customdata=top_domains[["pathogenic", "total", "pathogenic_fraction"]],
-        ),
-        row=1,
-        col=1
-    )
-
-    # Figure 2 - pathogenic fraction
+    # Figure 1 - pathogenic fraction
     fig.add_trace(
         go.Bar(
             x=x_order,
@@ -209,11 +183,38 @@ def save_domain_distrib_plot(df: pd.DataFrame) -> pd.DataFrame:
             customdata=top_domains[["pathogenic", "non_pathogenic", "total"]],
         ),
         row=1,
+        col=1
+    )
+
+    # Figure 2.1 - pathogenic variants
+    fig.add_trace(
+        go.Bar(
+            x=x_order,
+            y=top_domains["pathogenic"],
+            name="pathogenic",
+            marker_color="#d62728",
+            customdata=top_domains[["non_pathogenic", "total", "pathogenic_fraction"]],
+        ),
+        row=1,
         col=2
     )
 
-    fig.update_yaxes(title_text="Number of variants", row=1, col=1)
-    fig.update_yaxes(title_text="Fraction of pathogenic variants", row=1, col=2)
+    # Figure 2.2 - non-pathogenic variants
+    fig.add_trace(
+        go.Bar(
+            x=x_order,
+            y=top_domains["non_pathogenic"],
+            name="non_pathogenic",
+            marker_color="#1f77b4",
+            customdata=top_domains[["pathogenic", "total", "pathogenic_fraction"]],
+        ),
+        row=1,
+        col=2
+    )
+
+    fig.update_yaxes(title_text="Fraction of pathogenic variants", row=1, col=1)
+    fig.update_yaxes(title_text="Number of variants", row=1, col=2)
+
 
     fig.update_layout(
         barmode="stack",
@@ -243,6 +244,90 @@ def save_domain_distrib_plot(df: pd.DataFrame) -> pd.DataFrame:
 
     return domain_counts
 
+# Main plot #3: Histograms of frame status vs. phenotype class
+def save_reading_frame_plot(df: pd.DataFrame) -> pd.DataFrame:
+    tmp = df.dropna(subset=["frame_status", "phenotype_class"]).copy()
+
+    # Contingency table
+    frame_counts = (
+        tmp.groupby(["frame_status", "phenotype_class"])
+        .size()
+        .unstack(fill_value=0)
+        .reset_index()
+    )
+
+    frame_counts["total"] = frame_counts.iloc[:,1:].sum(axis=1)
+
+    # Counting proportions
+    for col in frame_counts.columns:
+        if col not in ["frame_status", "total"]:
+            frame_counts[col + "_prop"] = frame_counts[col] / frame_counts["total"]
+
+    phenotypes = [c for c in frame_counts.columns if c not in ["frame_status","total"] and not c.endswith("_prop")]
+    phenotypes_prop = [p + "_prop" for p in phenotypes]
+
+    x = frame_counts["frame_status"]
+
+    fig = make_subplots(
+        rows=1,
+        cols=2,
+        subplot_titles=[
+            "Reading frame rule: counts",
+            "Reading frame rule: proportions"
+        ],
+        horizontal_spacing=0.12
+    )
+
+    colors = {
+        "DMD": "#e74c3c",
+        "BMD": "#4c6ef5",
+        "other": "#afafaf"
+    }
+
+
+    # Figure 1 - Reading frame rule: counts
+    for p in phenotypes:
+        fig.add_trace(
+            go.Bar(
+                x=x,
+                y=frame_counts[p],
+                name=p,
+                marker_color=colors.get(p, None)
+            ),
+            row=1,
+            col=1
+        )
+
+    # Figure 2 - Reading frame rule: proportions
+    for p, pp in zip(phenotypes, phenotypes_prop):
+        fig.add_trace(
+            go.Bar(
+                x=x,
+                y=frame_counts[pp],
+                name=p,
+                marker_color=colors.get(p, None),
+                showlegend=False
+            ),
+            row=1,
+            col=2
+        )
+
+    fig.update_layout(
+        barmode="stack",
+        width=1400,
+        height=600,
+        title="Reading frame rule: frame status vs phenotype"
+    )
+
+    fig.update_yaxes(title="Number of variants", row=1, col=1)
+    fig.update_yaxes(title="Proportion of variants", row=1, col=2)
+
+    fig.update_xaxes(title="Frame status")
+
+    fig.write_image(FIGURES / "2XX_reading_frame_rule.png", scale=2)
+
+    return frame_counts
+
 # Main function
 def run_exploratory() -> None:
     df = load_annotated()
@@ -250,6 +335,7 @@ def run_exploratory() -> None:
 
     exon_table = save_exon_distrib_plot(df)
     domain_table = save_domain_distrib_plot(df)
+    reading_frame_table = save_reading_frame_plot(df)
 
     print(f"Saved figures to: {FIGURES}")
     print(exon_table)
