@@ -32,7 +32,7 @@ data/processed/DMD_variants_annotated.csv
 
 まず、**DMD遺伝子の全79エクソン**にわたる病原性変異および非病原性変異の分布を分析しました。
 
-![Exon distribution](figures/0XX_exon_distribution.png)
+![Exon distribution](../figures/0XX_exon_distribution.png)
 
 ２つの補完的な可視化結果が生成されました：**エクソンごとの変異数**、**エクソンごとの病原性変異の割合**です。
 
@@ -44,7 +44,7 @@ data/processed/DMD_variants_annotated.csv
 
 変異は、ジストロフィンの機能的な**タンパク質ドメイン**にマッピングされた（マッピングはUniProtによる）。名ドメインについて、変異のそう数および病原性変異の割合を算出しました。
 
-![Domain distribution](figures/1XX_domain_distribution.png)
+![Domain distribution](../figures/1XX_domain_distribution.png)
 
 病原性割合が最も高いドメインには、**アクチン結合ドメイン**、**SNTB1結合領域**、**シントロフィンの相互作用**などが含まれます。これらのドメインは、ジストロフィン・糖タンパク質複合体におけるジストロフィンの構造的役割に不可欠な**重要な相互作用界面**に対応しています。これらの領域における変異は、タンパク質の機能をより頻繁に阻害すると予想され、より高い病原性を示します　(Ervasti & Campbell, 1993; Koenig et al., 1988; Blake et al., 2002)。
 
@@ -52,7 +52,7 @@ data/processed/DMD_variants_annotated.csv
 
 (Monaco et al., 1988) で記述されました、ジストロフィン病における古典的なリーディングフレームの規則について検証が行われた。この規則によれば、フレーム外変異は重症のデュシェンヌ型筋ジストロフィー（DMD) を引き起こす傾向がある一方、フレーム内変異はより軽症のベッカー型筋ジストロフィー（BMD) を引き起こすという。
 
-![Reading frame rule](figures/2XX_reading_frame_rule.png)
+![Reading frame rule](../figures/2XX_reading_frame_rule.png)
 
 表現方およびフレーム状態ごとの変異数と、表現型の割合を示す割合プロットが生成されました。
 

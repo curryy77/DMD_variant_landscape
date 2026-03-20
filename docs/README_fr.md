@@ -31,7 +31,7 @@ data/processed/DMD_variants_annotated.csv
 #### 1. Répartition des variants au niveau des exons
 Nous avons tout d'abord analysé la répartition des variants pathogènes et non pathogènes sur l'ensemble des **79 exons du gène DMD**.
 
-![Exon distribution](figures/0XX_exon_distribution.png)
+![Exon distribution](../figures/0XX_exon_distribution.png)
 
 Deux visualisations complémentaires sont générées : **le nombre de variants par exon** et **la proportion de variants pathogènes par exon**.
 
@@ -42,7 +42,7 @@ Cette région recouvre le domaine central en forme de tige de la dystrophine, qu
 #### 2. Pathogénicité au niveau du domaine
 Les variants ont été cartographiés (cartographie fournie par UniProt) par rapport aux **domaines protéiques** fonctionnels de la dystrophine. Pour chaque domaine, nous avons calculé le nombre total de variants ainsi que la proportion de variants pathogènes.
 
-![Domain distribution](figures/1XX_domain_distribution.png)
+![Domain distribution](../figures/1XX_domain_distribution.png)
 
 Les domaines présentant la plus forte fraction pathogène comprennent le **domaine de liaison à l'actine**, la **région de liaison à la SNTB1** et l'**interaction avec la syntrophine**. Ces domaines correspondent à des **interfaces d'interaction critiques** nécessaires au rôle structurel de la dystrophine au sein du complexe glycoprotéique de la dystrophine. On s'attend à ce que les mutations dans ces régions perturbent plus fréquemment la fonction protéique et présentent une pathogénicité plus élevée (Ervasti & Campbell, 1993 ; Koenig et al., 1988 ; Blake et al., 2002).
 
@@ -50,7 +50,7 @@ Les domaines présentant la plus forte fraction pathogène comprennent le **doma
 
 La règle classique du cadre de lecture, décrite dans (Monaco et al., 1988) dans le contexte des dystrophinopathies, a été vérifiée. Selon cette règle, les mutations hors cadre ont tendance à entraîner des cas graves de DMD, tandis que les mutations dans le cadre se traduisent par des cas plus bénins de dystrophie musculaire de Becker.
 
-![Reading frame rule](figures/2XX_reading_frame_rule.png)
+![Reading frame rule](../figures/2XX_reading_frame_rule.png)
 
 Un graphique présentant le nombre de variants par phénotype et par statut de cadre de lecture, ainsi qu'un graphique illustrant la répartition des fractions phénotypiques, a été généré. 
 

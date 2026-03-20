@@ -30,7 +30,7 @@ data/processed/DMD_variants_annotated.csv
 #### 1. Exon-level distribution of variants
 First, we analyzed the distribution of pathogenic and non-pathogenic variants across all **79 exons of the DMD gene**.
 
-![Exon distribution](figures/0XX_exon_distribution.png)
+![Exon distribution](../figures/0XX_exon_distribution.png)
 
 Two complementary visualizations are produced: **variant counts per exon**, and **fraction of pathogenic variants per exon**.
 
@@ -41,14 +41,14 @@ This region overlaps with the central rod domain of dystrophin, which contains m
 #### 2. Domain level pathogenicity
 Variants were mapped (mapping provided by UniProt) to functional **protein domains** of dystrophin. For each domain we computed total number of variants and fraction of pathogenic variants.
 
-![Domain distribution](figures/1XX_domain_distribution.png)
+![Domain distribution](../figures/1XX_domain_distribution.png)
 
 Domains with the highest pathogenic fraction include **actin-binding domain**, **SNTB1 binding region**, **interaction with syntrophin**. These domains correspond to **critical interaction interfaces** required for dystrophin's structural role in the dystrophin-glycoprotein complex. Mutations in such regions are expected to more frequently disrupt protein function and there show higher pathogenicity (Ervasti & Campbell, 1993; Koenig et al., 1988; Blake et al., 2002).
 
 #### 3. Reading frame rule analysis
 The classical reading frame rule, described in (Monaco et al., 1988) in dystrophinopathies was tested. The rule states, that the out-of-frame mutations tend to lead to severe, DMD case, while in-frame mutations are resulting in more milder, Becker's muscular dystrophy case.
 
-![Reading frame rule](figures/2XX_reading_frame_rule.png)
+![Reading frame rule](../figures/2XX_reading_frame_rule.png)
 
 Variant counts by phenotype and frame status alongside with proportion plot showing phenotype fractions was generated. 
 
