@@ -2,7 +2,7 @@
   <a href="docs/README_en.md">🇬🇧 English</a> |
   <a href="docs/README_ja.md">🇯🇵 日本語</a> |
   <a href="docs/README_fr.md">🇫🇷 Français</a> |
-  <a href="docs/README_ru.md">🇷🇺 Русский</a> |
+  <a href="docs/README_ru.md">🇷🇺 Русский</a> 
 </p>
 
 # DMD Variant Landscape Analysis
