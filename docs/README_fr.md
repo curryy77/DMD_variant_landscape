@@ -78,6 +78,8 @@ L'analyse intègre des informations sur les variants provenant de plusieurs base
 
 Nous remercions les responsables des bases de données susmentionnées de nous avoir donné libre accès aux données génomiques et cliniques.
 
+Veuillez noter que seules les données traitées sont incluses dans ce référentiel. Les données brutes restent soumises aux licences des bases de données d'origine.
+
 ---
 ### Licence
 

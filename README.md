@@ -76,6 +76,8 @@ The analysis integrates variant information from several public databases:
 
 We thank the maintainers of the upper-mentioned databases for providing open access to genomic and clinical data.
 
+Note that only processed data are included in this repository. Raw data remain subject to the original database licenses.
+
 ---
 ### License
 
