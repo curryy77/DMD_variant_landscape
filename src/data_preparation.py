@@ -159,8 +159,7 @@ def load_and_clean_ensembl(path: str | Path) -> pd.DataFrame:
         "AA": "aa_change",
         "AA coord": "aa_pos",
         "REVEL": "revel",
-        "MetaLR": "meta_lr",
-        "Mutation Assessor": "mutation_assessor",
+        "MetaLR": "meta_lr"
     })
 
     # Split the location into two columns - chromosome and the position in it
@@ -179,8 +178,7 @@ def load_and_clean_ensembl(path: str | Path) -> pd.DataFrame:
         "aa_change",
         "aa_pos",
         "revel",
-        "meta_lr",
-        "mutation_assessor",
+        "meta_lr"
     ]
 
     df = df[cols]
