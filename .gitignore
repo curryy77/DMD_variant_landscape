@@ -18,7 +18,11 @@ ENV/
 jupyter_cache/
 .profile
 
-data/raw/
+data/raw/ClinVar_DMD_raw.tsv
+data/raw/Ensembl_DMD_raw.csv
+data/raw/gnomAD_DMD_raw.csv
+data/raw/expression/
+data/raw/annotation/
 
 data/processed/*.parquet
 data/processed/*.h5
