@@ -50,7 +50,7 @@ The project task is to **study various features** and patterns of variants in th
 
 An image showing the **pipeline** of this project:
 
-![Project Pipeline2](../assets/pipeline/project_pipeline_ru.png)
+![Project Pipeline2](../assets/pipeline/project_pipeline_en.png)
 
 At the **data preparation** stage, initially **three tables** on DMD gene variants were collected from **ClinVar**, **Ensembl**, and **gnomAD**. Next, keys were **unified** (for example, ``var_id``, ``rsid``), coordinate and categorical field formats were **brought** to a single standard, **technical duplicates** and empty categories were **removed**, and numerical features were **normalized** with explicit missing-value handling. After that, step-by-step **"merging"** was applied (left-join from the main variant table), at each step **controlling** row loss, growth of missingness, and field consistency. Code for all of the above is located in ``src/data_preparation.py``.
 

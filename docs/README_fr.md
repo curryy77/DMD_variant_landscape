@@ -50,7 +50,7 @@ L’objectif du projet est d’**étudier différents marqueurs** et patterns de
 
 Image montrant le **pipeline** de ce projet :
 
-![Project Pipeline2](../assets/pipeline/project_pipeline_ru.png)
+![Project Pipeline2](../assets/pipeline/project_pipeline_fr.png)
 
 À l’étape de **préparation des données**, **trois tables** de variants du gène DMD ont d’abord été collectées à partir des bases **ClinVar**, **Ensembl** et **gnomAD**. Ensuite, les clés ont été **uniformisées** (par exemple, ``var_id``, ``rsid``), les formats des coordonnées et des champs catégoriels ont été **ramenés** à un standard unique, les **doublons techniques** et les catégories vides ont été **supprimés**, et les variables numériques ont été **normalisées** avec un traitement explicite des valeurs manquantes. Après cela, une **"fusion" progressive** a été appliquée (left-join depuis la table principale des variants), en **contrôlant** à chaque étape les pertes de lignes, l’augmentation des manquants et la cohérence des champs. Le code de tout ce qui précède se trouve dans ``src/data_preparation.py``.
 

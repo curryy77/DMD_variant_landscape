@@ -50,7 +50,7 @@
 
 本プロジェクトの **パイプライン** を示す図：
 
-![Project Pipeline2](../assets/pipeline/project_pipeline_ru.png)
+![Project Pipeline2](../assets/pipeline/project_pipeline_ja.png)
 
 **データ準備** 段階では、まず DMD遺伝子バリアントに関する **3つのテーブル** を **ClinVar**・**Ensembl**・**gnomAD** から収集しました。次に、キー（例：``var_id``, ``rsid``）を **統一** し、座標およびカテゴリフィールドの形式を単一標準に **整合** し、**技術的重複** と空カテゴリを **削除** し、欠損値を明示的に処理した上で数値特徴を **正規化** しました。その後、主バリアントテーブルからの left-join による **段階的「結合」** を適用し、各段階で行損失、欠損増加、フィールド整合性を **制御** しました。以上のコードは ``src/data_preparation.py`` にあります。
 
