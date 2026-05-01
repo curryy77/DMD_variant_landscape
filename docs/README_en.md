@@ -5,7 +5,7 @@
   <a href="README_ru.md">🇷🇺 Русский</a> 
 </p>
 
-# DMD Variant Landscape Analysis
+# DMD gene variant landscape analysis: exploratory study based on data merged from ClinVar, Ensembl and gnomAD sources
 
 ![License](https://img.shields.io/badge/license-MIT-green)
 ![Python](https://img.shields.io/badge/python-3.10%2B-blue)
