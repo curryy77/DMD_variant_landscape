@@ -38,7 +38,6 @@ cache/
 *.tmp
 *.temp
 
-models/
 *.joblib
 *.pkl
 *.pickle
